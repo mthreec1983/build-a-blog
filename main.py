@@ -17,11 +17,8 @@ class Blog(db.Model):
         self.title = title
         self.body = body
 
-@app.route('/')
-def index():
-    return redirect('/blog')
 
-@app.route('/blog')
+@app.route('/')
 def blog():
     blog_id = request.args.get('id')
 
@@ -41,15 +38,15 @@ def new_post():
         body_error = ''
 
         if not blog_title:
-            title_error = "Please enter a blog title"
+            title_error = "Enter blog title"
         if not blog_body:
-            body_error = "Please enter a blog entry"
+            body_error = "Blog entry required"
 
         if not body_error and not title_error:
             new_entry = Blog(blog_title, blog_body)     
             db.session.add(new_entry)
             db.session.commit()        
-            return redirect('/blog?id={}'.format(new_entry.id)) 
+            return redirect('/?id={}'.format(new_entry.id)) 
         else:
             return render_template('newpost.html', title='New Entry', title_error=title_error, body_error=body_error, 
                 blog_title=blog_title, blog_body=blog_body)
